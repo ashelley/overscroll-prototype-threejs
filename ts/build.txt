@@ -1,5 +1,5 @@
 declare.ts
-PlaneMesh.ts
+Display.ts
 Scene.ts
 UI.ts
 

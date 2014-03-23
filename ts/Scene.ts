@@ -2,8 +2,8 @@ module Overscroll {
 
 	export class Scene {
 
-		private width;
-		private height;
+		public width;
+		public height;
 
 		private canvas;
 		private renderer;

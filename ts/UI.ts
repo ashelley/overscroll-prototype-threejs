@@ -47,7 +47,7 @@ module Overscroll {
 			instance.scene.on('mousedown', function(pos) {
 				TWEEN.removeAll();
 				instance.clickPos = pos;
-				instance.savedPos = {x: instance.content.position.x, y: instance.content.position.y};
+				instance.savedPos = {x: instance.content.mesh.position.x, y: instance.content.mesh.position.y};
 			});	
 
 			instance.scene.on('mouseup', function(pos) {				
@@ -62,20 +62,34 @@ module Overscroll {
 			instance.scene.on('mousemove', function(pos) {
 				instance.lastPos = pos;
 				if(instance.clickPos) {
-					var posDelta = instance.getPosDelta(instance.clickPos, pos);
-					var newY = instance.savedPos.y - posDelta.y;
-					instance.content.position.y = newY;					
+					instance.checkOverScrollDuring(pos);
 				}
 			});
 
+			/*
 			var texture = THREE.ImageUtils.loadTexture( imageSrc );
 
 			var textureMaterial = new THREE.MeshBasicMaterial( {
-				map: texture
+				map: texture,
+				side: THREE.DoubleSide
 			});
+			*/
 
-			var content = PlaneMesh.create({material: textureMaterial, width: width, height: height*2, widthSegments: widthSegments, heightSegments: heightSegments});
-			instance.scene.add(content);
+		    var vertShader = document.getElementById('vertexShader').innerHTML;
+		    var fragShader = document.getElementById('fragmentShader').innerHTML;
+
+		    var uniforms = {
+		        texture1: { type: "t", value: THREE.ImageUtils.loadTexture( imageSrc ) }
+		    };
+
+		    var textureMaterial = new THREE.ShaderMaterial({
+		        uniforms: uniforms,
+		        vertexShader: vertShader,
+		        fragmentShader: fragShader
+		    });
+
+			var content = Display.create({scene: instance.scene, material: textureMaterial, width: width, height: height*2, widthSegments: widthSegments, heightSegments: heightSegments});
+			instance.scene.add(content.mesh);
 			instance.scene.setSize({
 				width: width,
 				height: height
@@ -83,16 +97,15 @@ module Overscroll {
 
 			var wireframeMaterial = new THREE.MeshBasicMaterial( { wireframe: true, color: 0x1255cc} );			
 
-			var wireframeContent = PlaneMesh.create({material: wireframeMaterial, width: width, height: height*2, widthSegments: widthSegments, heightSegments: heightSegments});
+			var wireframeContent = Display.create({scene: instance.scene, material: wireframeMaterial, width: width, height: height*2, widthSegments: widthSegments, heightSegments: heightSegments});
 			instance.scene.setSize({
 				width: width,
 				height: height
-			});			
+			});
 
 			instance.content = content;	
 			instance.wireframeContent = wireframeContent;		
-
-			wireframeContent.position = content.position;
+			wireframeContent.mesh.position = content.mesh.position;
 
 			return instance;
 
@@ -105,46 +118,41 @@ module Overscroll {
 			return {x: xDelta * this.scene.width, y: yDelta * this.scene.height};
 		}
 
+		public checkOverScrollDuring(pos) {
+			var self = this;
+			var posDelta = this.getPosDelta(this.clickPos, pos);
+			var newY = this.savedPos.y - posDelta.y;	
+
+			this.content.setYPos(newY);
+			this.wireframeContent.setYPos(newY);
+		}	
+
 		public checkOverScroll(pos) {
 			var self = this;
 			var posDelta = this.getPosDelta(this.clickPos, pos);
 
-			var top = this.scene.height;
+			var newY = this.savedPos.y - posDelta.y;	
 
-			var current;
-			var to;			
-			var tween;
+			if(this.content.isAtTop)		
+				console.log("at top");
 
-			var newY = this.savedPos.y - posDelta.y;					
+			if(this.content.isAtBottom)		
+				console.log("at bottom");				
 
-			if(newY > top) {
+			if(this.content.isAtTop || this.content.isAtBottom) {
 				TWEEN.removeAll();
 
-				current = {x: this.content.position.x, y: newY};
-				to = {x: current.x, y: top };
+				var current = {x: this.content.mesh.position.x, y: newY};
+				var to = {x: current.x, y: this.content.isAtTop ? this.scene.height : 0 };
 
-		        tween = new TWEEN.Tween(current)
-		            .to( to, 1000 )
-		            .easing( TWEEN.Easing.Elastic.InOut )
+		        var tween = new TWEEN.Tween(current)
+		            .to( to, 300 )
 		            .onUpdate( function () {
-		                self.content.position.y = current.y;
+		            	self.content.setYPos(current.y);
+		            	self.wireframeContent.setYPos(current.y);
 		            })
 		            .start();						
-			}
-			if(newY < 0) {
-				TWEEN.removeAll();
-
-				current = {x: this.content.position.x, y: newY};
-				to = {x: current.x, y: 0 };
-
-		        tween = new TWEEN.Tween(current)
-		            .to( to, 1000 )
-		            .easing( TWEEN.Easing.Elastic.InOut )
-		            .onUpdate( function () {
-		                self.content.position.y = current.y;
-		            })
-		            .start();												
-			}
+		    }
 
 		}		
 
@@ -181,12 +189,12 @@ module Overscroll {
 		   	this.camera.position.z -= amount;
 		   }	
 		   if(c == 'Y') {
-		   		this.scene.remove(this.content);
+		   		this.scene.remove(this.content.mesh);
 		   		this.scene.add(this.wireframeContent);		   		
 		   }
 		   if(c == 'U') {
-		   		this.scene.add(this.content);
-		   		this.scene.remove(this.wireframeContent);		   				   	
+		   		this.scene.add(this.content.mesh);
+		   		this.scene.remove(this.wireframeContent.mesh);		   				   	
 		   }
 		   this.camera.updateProjectionMatrix();			   	   		   		   
 		}
