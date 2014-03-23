@@ -42,7 +42,13 @@
 
 				var container = document.getElementById('overscroll');
 
-			  	overscroller = new Overscroll.UI.create({container: container, height: window.innerHeight, width: window.innerWidth, widthSegments: 2, heightSegments: 2});				
+			  	overscroller = new Overscroll.UI.create({container: container, 
+			  		height: window.innerHeight, 
+			  		width: window.innerWidth, 
+			  		widthSegments: 2, 
+			  		heightSegments: 2, 
+			  		image: 'images/example1-small.png'}
+			  	);				
 
 				$('body').keyup(function(e){
 					overscroller.keyUp(e);
@@ -55,6 +61,14 @@
 				$( window ).resize(function(e) {
 					overscroller.scene.setSize({width: window.innerWidth, height: window.innerHeight});
 				});
+
+				$( window ).resize(function(e) {
+					overscroller.scene.setSize({width: window.innerWidth, height: window.innerHeight});
+				});				
+
+				$(window).bind('orientationchange', function(e) {
+					overscroller.scene.setSize({width: window.innerWidth, height: window.innerHeight});
+				});				
 
 			  	overscroller.start();
 			});

@@ -23,6 +23,8 @@ module Overscroll {
 			var widthSegments = options.widthSegments;
 			var heightSegments = options.heightSegments;
 
+			var imageSrc = options.image;
+
 			var camera = new THREE.OrthographicCamera(0, width, 0, height, 1, -1000);			
 			camera.position.z = 1;		
 
@@ -64,7 +66,7 @@ module Overscroll {
 				}
 			});
 
-			var texture = THREE.ImageUtils.loadTexture( 'images/example1.png' );
+			var texture = THREE.ImageUtils.loadTexture( imageSrc );
 
 			var textureMaterial = new THREE.MeshBasicMaterial( {
 				map: texture
