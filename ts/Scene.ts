@@ -32,13 +32,15 @@ module Overscroll {
 
 			element.appendChild(renderer.domElement);
 
-			var stats = new Stats();
-			stats.setMode(0); // 0: fps, 1: ms
-			// Align top-left
-			stats.domElement.style.position = 'absolute';
-			stats.domElement.style.right = '0px';
-			stats.domElement.style.top = '0px';
-			element.appendChild( stats.domElement );								
+			if(options.enableStats) {
+				var stats = new Stats();
+				stats.setMode(0); // 0: fps, 1: ms
+				// Align top-left
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.right = '0px';
+				stats.domElement.style.top = '0px';
+				element.appendChild( stats.domElement );								
+			}
 
 			var cameraControls = new THREE.OrbitControls(camera);
 			cameraControls.enabled = false;										
@@ -181,7 +183,9 @@ module Overscroll {
 		}
 
 		public render() {
-	  		this.stats.update();	
+			if(this.stats) {
+	  			this.stats.update();	
+			}
 			this.renderer.render(this.scene, this.camera);
 		}			
 	}	

@@ -22,6 +22,7 @@ module Overscroll {
 
 			var widthSegments = options.widthSegments;
 			var heightSegments = options.heightSegments;
+			var enableStats = options.enableStats;
 
 			var imageSrc = options.image;
 
@@ -39,7 +40,8 @@ module Overscroll {
 				container: container,
 				camera: camera,
 				renderer: renderer,
-				scene: scene
+				scene: scene,
+				enableStats: enableStats
 			});
 
 			instance.scene.on('mousedown', function(pos) {

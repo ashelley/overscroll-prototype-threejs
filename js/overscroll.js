@@ -54,14 +54,16 @@ var Overscroll;
 
             element.appendChild(renderer.domElement);
 
-            var stats = new Stats();
-            stats.setMode(0);
+            if (options.enableStats) {
+                var stats = new Stats();
+                stats.setMode(0);
 
-            // Align top-left
-            stats.domElement.style.position = 'absolute';
-            stats.domElement.style.right = '0px';
-            stats.domElement.style.top = '0px';
-            element.appendChild(stats.domElement);
+                // Align top-left
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.right = '0px';
+                stats.domElement.style.top = '0px';
+                element.appendChild(stats.domElement);
+            }
 
             var cameraControls = new THREE.OrbitControls(camera);
             cameraControls.enabled = false;
@@ -202,7 +204,9 @@ var Overscroll;
         };
 
         Scene.prototype.render = function () {
-            this.stats.update();
+            if (this.stats) {
+                this.stats.update();
+            }
             this.renderer.render(this.scene, this.camera);
         };
         return Scene;
@@ -224,6 +228,7 @@ var Overscroll;
 
             var widthSegments = options.widthSegments;
             var heightSegments = options.heightSegments;
+            var enableStats = options.enableStats;
 
             var imageSrc = options.image;
 
@@ -241,7 +246,8 @@ var Overscroll;
                 container: container,
                 camera: camera,
                 renderer: renderer,
-                scene: scene
+                scene: scene,
+                enableStats: enableStats
             });
 
             instance.scene.on('mousedown', function (pos) {
