@@ -1,74 +1,14 @@
 var Overscroll;
 (function (Overscroll) {
-    var TextSprite = (function () {
-        function TextSprite() {
-        }
-        TextSprite.create = function (options) {
-            var text = options.text;
-            var textHeight = 50;
-
-            var canvas = document.createElement('canvas');
-
-            var texture = new THREE.Texture(canvas);
-
-            var context = canvas.getContext('2d');
-
-            context.font = "bold " + textHeight + "px sans-serif";
-
-            var measurement = context.measureText(text);
-
-            canvas.height = textHeight;
-            canvas.width = measurement.width;
-
-            context.fillStyle = "#EE1133";
-            context.fillRect(0, 0, canvas.width, canvas.height);
-
-            context.font = "bold " + textHeight + "px sans-serif";
-            context.fillStyle = "#BBEE33";
-            context.textBaseline = "top";
-
-            //context.textAlign = "center";
-            context.fillText(text, 0, 0);
-
-            texture.needsUpdate = true;
-
-            var material = new THREE.SpriteMaterial({ map: texture });
-
-            var sprite = new THREE.Sprite(material);
-
-            sprite.scale.set(canvas.width, canvas.height, 1);
-
-            return sprite;
-        };
-        return TextSprite;
-    })();
-    Overscroll.TextSprite = TextSprite;
-})(Overscroll || (Overscroll = {}));
-var Overscroll;
-(function (Overscroll) {
     var PlaneMesh = (function () {
         function PlaneMesh() {
         }
         PlaneMesh.create = function (options) {
-            //var texture = THREE.ImageUtils.loadTexture( "images/stack_overflow.png" );
-            // assuming you want the texture to repeat in both directions:
-            //texture.wrapS = THREE.RepeatWrapping;
-            //texture.wrapT = THREE.RepeatWrapping;
-            // how many times to repeat in each direction; the default is (1,1),
-            //   which is probably why your example wasn't working
-            //texture.repeat.set( 4, 4 );
-            //var material = new THREE.MeshLambertMaterial({map: texture});
-            //var material = new THREE.MeshBasicMaterial({map: options.texture});
-            //var material = new THREE.MeshBasicMaterial( { wireframe: true, color: 0x1255cc} );
-            //var material = new THREE.LineBasicMaterial();
-            //var material = new THREE.MeshBasicMaterial();
-            //var material = new THREE.MeshNormalMaterial()
-            //var geometry = new THREE.PlaneGeometry(options.width, options.height, options.widthSegments, options.heightSegments);
             var width = options.width;
             var height = options.height;
 
-            var widthSegments = 1;
-            var heightSegments = 100;
+            var widthSegments = options.widthSegments;
+            var heightSegments = options.heigtSegments;
 
             var geometry = new THREE.PlaneGeometry(width, height, widthSegments, heightSegments);
 
@@ -86,14 +26,7 @@ var Overscroll;
             plane.rotation.y = Math.PI;
             plane.rotation.z = Math.PI;
 
-            //plane.side = THREE.DoubleSide;ww
-            //plane.position.x = 100;
-            // rotation.z is rotation around the z-axis, measured in radians (rather than degrees)
-            // Math.PI = 180 degrees, Math.PI / 2 = 90 degrees, etc.
-            //plane.rotation.z = Math.PI / 2;
             return plane;
-            //var cube = new THREE.Mesh( new THREE.CubeGeometry( 200, 200, 200 ), material );
-            //return cube;
         };
         return PlaneMesh;
     })();
@@ -181,8 +114,6 @@ var Overscroll;
         Scene.prototype.setSize = function (options) {
             this.width = options.width;
             this.height = options.height;
-
-            console.log('setting size to: ' + this.width + "x" + this.height + " window size is " + window.innerWidth + "x" + window.innerHeight);
 
             if (this.renderer) {
                 this.renderer.setSize(this.width, this.height);
@@ -290,6 +221,9 @@ var Overscroll;
             var width = options.width;
             var height = options.height;
 
+            var widthSegments = options.widthSegments;
+            var heightSegments = options.heightSegments;
+
             var camera = new THREE.OrthographicCamera(0, width, 0, height, 1, -1000);
             camera.position.z = 1;
 
@@ -331,32 +265,13 @@ var Overscroll;
                 }
             });
 
-            /*
-            var pointLight = new THREE.PointLight(0xF8D898);
-            
-            pointLight.position.x = -1000;
-            pointLight.position.y = 0;
-            pointLight.position.z = -10000;
-            pointLight.intensity = 2.9;
-            pointLight.distance = 25000;
-            */
-            var light = new THREE.AmbientLight(0x404040);
-
-            light.position.z = -1000;
-            light.position.x = -1000;
-            light.position.y = -1000;
-
-            instance.scene.add(light);
-
             var texture = THREE.ImageUtils.loadTexture('images/example1.png');
 
             var textureMaterial = new THREE.MeshBasicMaterial({
-                //wireframe: true,
-                //color: "red",
                 map: texture
             });
 
-            var content = Overscroll.PlaneMesh.create({ material: textureMaterial, width: width, height: height * 2, widthSegments: 50, heightSegments: 50 * (width / height) });
+            var content = Overscroll.PlaneMesh.create({ material: textureMaterial, width: width, height: height * 2, widthSegments: widthSegments, heightSegments: heightSegments });
             instance.scene.add(content);
             instance.scene.setSize({
                 width: width,
@@ -365,7 +280,7 @@ var Overscroll;
 
             var wireframeMaterial = new THREE.MeshBasicMaterial({ wireframe: true, color: 0x1255cc });
 
-            var wireframeContent = Overscroll.PlaneMesh.create({ material: wireframeMaterial, width: width, height: height * 2, widthSegments: 50, heightSegments: 50 * (width / height) });
+            var wireframeContent = Overscroll.PlaneMesh.create({ material: wireframeMaterial, width: width, height: height * 2, widthSegments: widthSegments, heightSegments: heightSegments });
             instance.scene.setSize({
                 width: width,
                 height: height
@@ -466,7 +381,6 @@ var Overscroll;
             var self = this;
 
             TWEEN.update();
-
             this.scene.render();
 
             requestAnimFrame(function () {

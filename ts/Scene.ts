@@ -92,8 +92,6 @@ module Overscroll {
 			this.width = options.width;
 			this.height = options.height;
 
-			console.log('setting size to: ' + this.width + "x" + this.height + " window size is " + window.innerWidth + "x" + window.innerHeight);			
-
 			if(this.renderer) {
 				this.renderer.setSize(this.width, this.height);
 			}

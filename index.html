@@ -42,7 +42,7 @@
 
 				var container = document.getElementById('overscroll');
 
-			  	overscroller = new Overscroll.UI.create({container: container, height: window.innerHeight, width: window.innerWidth});				
+			  	overscroller = new Overscroll.UI.create({container: container, height: window.innerHeight, width: window.innerWidth, widthSegments: 2, heightSegments: 2});				
 
 				$('body').keyup(function(e){
 					overscroller.keyUp(e);

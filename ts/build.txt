@@ -1,5 +1,4 @@
 declare.ts
-Textsprite.ts
 PlaneMesh.ts
 Scene.ts
 UI.ts

@@ -20,6 +20,9 @@ module Overscroll {
 			var width = options.width;
 			var height = options.height;
 
+			var widthSegments = options.widthSegments;
+			var heightSegments = options.heightSegments;
+
 			var camera = new THREE.OrthographicCamera(0, width, 0, height, 1, -1000);			
 			camera.position.z = 1;		
 
@@ -61,23 +64,13 @@ module Overscroll {
 				}
 			});
 
-			var light = new THREE.AmbientLight( 0x404040 ); 			
-
-			light.position.z = -1000;
-			light.position.x = -1000;
-			light.position.y = -1000;
-
-			instance.scene.add(light);			
-
 			var texture = THREE.ImageUtils.loadTexture( 'images/example1.png' );
 
 			var textureMaterial = new THREE.MeshBasicMaterial( {
-				//wireframe: true,
-				//color: "red",
 				map: texture
 			});
 
-			var content = PlaneMesh.create({material: textureMaterial, width: width, height: height*2, widthSegments: 50, heightSegments: 50*(width/height)});
+			var content = PlaneMesh.create({material: textureMaterial, width: width, height: height*2, widthSegments: widthSegments, heightSegments: heightSegments});
 			instance.scene.add(content);
 			instance.scene.setSize({
 				width: width,
@@ -86,7 +79,7 @@ module Overscroll {
 
 			var wireframeMaterial = new THREE.MeshBasicMaterial( { wireframe: true, color: 0x1255cc} );			
 
-			var wireframeContent = PlaneMesh.create({material: wireframeMaterial, width: width, height: height*2, widthSegments: 50, heightSegments: 50*(width/height)});
+			var wireframeContent = PlaneMesh.create({material: wireframeMaterial, width: width, height: height*2, widthSegments: widthSegments, heightSegments: heightSegments});
 			instance.scene.setSize({
 				width: width,
 				height: height
@@ -199,9 +192,7 @@ module Overscroll {
 		  var self = this;
 
 		  TWEEN.update();
-
 		  this.scene.render();		  
-
 
 		  requestAnimFrame(function() {
 		  	self.loop();
