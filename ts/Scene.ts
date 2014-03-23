@@ -73,6 +73,7 @@ module Overscroll {
 
 			this.renderer.domElement.ontouchstart = function(e) {
 				Scene.OnMouseDown(e, self);		
+				e.preventDefault();
 			}			
 
 			this.renderer.domElement.ontouchmove = function(e) {				
