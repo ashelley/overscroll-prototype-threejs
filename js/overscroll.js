@@ -96,7 +96,7 @@ var Overscroll;
                 return;
             }
 
-            for (var i = 37; i > 1; i -= 4) {
+            for (var i = vertices.length - 3; i > 1; i -= 4) {
                 vertices[i].y = startY;
                 vertices[i - 1].y = startY;
                 vertices[i - 2].y = startY;
@@ -123,7 +123,7 @@ var Overscroll;
                 return;
             }
 
-            for (var i = 2; i < 38; i += 4) {
+            for (var i = 2; i < vertices.length - 2; i += 4) {
                 vertices[i].y = startY;
                 vertices[i + 1].y = startY;
                 vertices[i + 2].y = startY;
