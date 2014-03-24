@@ -107,23 +107,21 @@ module Overscroll {
         return;
       }
 
+      //vertices[38].y = this.scene.height;
+      //vertices[39].y = this.scene.height;
+
       for(var i = 37; i > 1; i-=4) {
         vertices[i].y = startY;
         vertices[i-1].y = startY;
         vertices[i-2].y = startY; 
         vertices[i-3].y = startY;
 
-        this.mesh.geometry.verticesNeedUpdate = true;  
-
         startY-= this.segmentHeight;
       }
       vertices[1].y = startY;
-
-      this.mesh.geometry.verticesNeedUpdate = true;  
-
       vertices[0].y = startY;
 
-      this.mesh.geometry.verticesNeedUpdate = true;   
+      this.mesh.geometry.verticesNeedUpdate = true;  
     }
 
     public stretchBottomVertices(y) {
@@ -141,20 +139,18 @@ module Overscroll {
         return;
       }
 
+      //vertices[0].y = 0;
+      //vertices[1].y = 0;
+
       for(var i = 2; i < 38; i+=4) {
         vertices[i].y = startY;
         vertices[i+1].y = startY;
         vertices[i+2].y = startY; 
         vertices[i+3].y = startY;
 
-        this.mesh.geometry.verticesNeedUpdate = true;  
-
         startY+= this.segmentHeight;
       }
       vertices[38].y = startY;
-
-      this.mesh.geometry.verticesNeedUpdate = true;  
-
       vertices[39].y = startY;
 
       this.mesh.geometry.verticesNeedUpdate = true;   

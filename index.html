@@ -20,7 +20,6 @@
 
 		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>		
 		<script src="js/three.js"></script>
-		<script src="js/CSS3DRenderer.js"></script>
 		<script src="js/OrbitControls.js"></script>
 		<script src="js/stats.min.js"></script>	
 		<script src="js/tween.min.js"></script>	
@@ -47,7 +46,7 @@
 			  		width: window.innerWidth, 
 			  		widthSegments: 2, 
 			  		heightSegments: 2, 
-			  		image: 'images/example1-small.png',
+			  		image: 'images/example1.png',
 			  		enableStats: true}
 			  	);				
 
@@ -74,6 +73,28 @@
 			  	overscroller.start();
 			});
 
+		</script>
+
+		<script id="vertexShader" type="x-shader/x-vertex">
+		    varying vec2 vUv;
+
+		    void main() {
+		        vUv = uv;
+
+		        gl_Position =   projectionMatrix * 
+		                        modelViewMatrix * 
+		                        vec4(position,1.0);
+		    }
+		</script>	
+		
+		<script id="fragmentShader" type="x-shader/x-fragment">
+    		uniform sampler2D texture1;
+
+    		varying vec2 vUv;
+
+    		void main() {
+        	gl_FragColor = texture2D(texture1, vUv); 
+    	}
 		</script>
 
 
