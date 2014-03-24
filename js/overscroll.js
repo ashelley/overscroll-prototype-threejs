@@ -443,12 +443,6 @@ var Overscroll;
 
             var newY = this.savedPos.y - posDelta.y;
 
-            if (this.content.isAtTop)
-                console.log("at top");
-
-            if (this.content.isAtBottom)
-                console.log("at bottom");
-
             if (this.content.isAtTop || this.content.isAtBottom) {
                 TWEEN.removeAll();
 
@@ -495,7 +489,7 @@ var Overscroll;
             }
             if (c == 'Y') {
                 this.scene.remove(this.content.mesh);
-                this.scene.add(this.wireframeContent);
+                this.scene.add(this.wireframeContent.mesh);
             }
             if (c == 'U') {
                 this.scene.add(this.content.mesh);
