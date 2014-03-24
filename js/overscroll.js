@@ -70,9 +70,11 @@ var Overscroll;
         Display.prototype.setYPos = function (y) {
             if (y > this.scene.height) {
                 this.isAtTop = true;
+                this.mesh.position.y = this.scene.height;
                 this.stretchTopVertices(y);
             } else if (y < 0) {
                 this.isAtBottom = true;
+                this.mesh.position.y = 0;
                 this.stretchBottomVertices(y);
             } else {
                 this.isAtTop = false;
@@ -102,9 +104,9 @@ var Overscroll;
 
                 startY -= this.segmentHeight;
             }
-            vertices[1].y = startY;
-            vertices[0].y = startY;
 
+            //vertices[1].y = startY;
+            //vertices[0].y = startY;
             this.mesh.geometry.verticesNeedUpdate = true;
         };
 
@@ -116,8 +118,6 @@ var Overscroll;
             var startY = 0 + deltaY + this.segmentHeight;
 
             var percDelta = (this.scene.height + deltaY + this.segmentHeight) / this.segmentHeight;
-
-            console.log(percDelta);
 
             if (percDelta > 2.25) {
                 return;
@@ -131,9 +131,9 @@ var Overscroll;
 
                 startY += this.segmentHeight;
             }
-            vertices[38].y = startY;
-            vertices[39].y = startY;
 
+            //vertices[38].y = startY;
+            //vertices[39].y = startY;
             this.mesh.geometry.verticesNeedUpdate = true;
         };
         return Display;
@@ -165,8 +165,6 @@ var Overscroll;
             if (options.enableStats) {
                 var stats = new Stats();
                 stats.setMode(0);
-
-                // Align top-left
                 stats.domElement.style.position = 'absolute';
                 stats.domElement.style.right = '0px';
                 stats.domElement.style.top = '0px';

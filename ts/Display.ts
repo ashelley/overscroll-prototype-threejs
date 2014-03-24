@@ -79,12 +79,14 @@ module Overscroll {
 		}
 
     public setYPos(y) {
-      if(y > this.scene.height) {
+      if(y > this.scene.height) {                 
         this.isAtTop = true;
+        this.mesh.position.y = this.scene.height;        
         this.stretchTopVertices(y);
       }
       else if(y < 0){
         this.isAtBottom = true;
+        this.mesh.position.y = 0; 
         this.stretchBottomVertices(y);
       }             
       else {
@@ -107,8 +109,8 @@ module Overscroll {
         return;
       }
 
-      //vertices[38].y = this.scene.height;
-      //vertices[39].y = this.scene.height;
+      //vertices[38].y = this.height;
+      //vertices[39].y = this.height;
 
       for(var i = 37; i > 1; i-=4) {
         vertices[i].y = startY;
@@ -118,8 +120,8 @@ module Overscroll {
 
         startY-= this.segmentHeight;
       }
-      vertices[1].y = startY;
-      vertices[0].y = startY;
+      //vertices[1].y = startY;
+      //vertices[0].y = startY;
 
       this.mesh.geometry.verticesNeedUpdate = true;  
     }
@@ -132,8 +134,6 @@ module Overscroll {
       var startY = 0 + deltaY + this.segmentHeight;
 
       var percDelta = (this.scene.height + deltaY + this.segmentHeight) / this.segmentHeight;
-
-      console.log(percDelta);
 
       if(percDelta > 2.25) {
         return;
@@ -150,8 +150,8 @@ module Overscroll {
 
         startY+= this.segmentHeight;
       }
-      vertices[38].y = startY;
-      vertices[39].y = startY;
+      //vertices[38].y = startY;
+      //vertices[39].y = startY;
 
       this.mesh.geometry.verticesNeedUpdate = true;   
     }     
